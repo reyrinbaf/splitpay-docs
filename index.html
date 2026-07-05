@@ -36,6 +36,125 @@
       --mono: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
     }
 
+    /* ── Dark mode tokens ──────────────────────── */
+    body.dark {
+      --primary: #3ecf8e;
+      --primary-deep: #5ae4a8;
+      --primary-ring: rgba(62, 207, 142, .22);
+      --on-primary: #111111;
+      --ink: #e2e8f0;
+      --ink-mute: #94a3b8;
+      --ink-faint: #64748b;
+      --canvas: #0f1117;
+      --canvas-soft: #181b23;
+      --hairline: #2a2d37;
+      --hairline-cool: #22252e;
+    }
+
+    body.dark .topbar {
+      background: #0f1117;
+      border-bottom-color: #2a2d37;
+    }
+
+    body.dark .sidebar {
+      border-right-color: #2a2d37;
+    }
+
+    body.dark pre {
+      background: #0a0c10;
+      border-color: #1e2028;
+    }
+
+    body.dark .terminal {
+      background: #0a0c10;
+      border-color: #1e2028;
+    }
+
+    body.dark code {
+      background: #181b23;
+      border-color: #2a2d37;
+      color: #e2e8f0;
+    }
+
+    body.dark .callout-note {
+      background: rgba(62, 207, 142, .08);
+      border-color: rgba(62, 207, 142, .25);
+      color: #5ae4a8;
+    }
+
+    body.dark .callout-warn {
+      background: rgba(251, 191, 36, .08);
+      border-color: rgba(251, 191, 36, .25);
+      color: #fbbf24;
+    }
+
+    body.dark .callout-info {
+      background: #181b23;
+      border-color: #2a2d37;
+      color: #e2e8f0;
+    }
+
+    body.dark .props-table th {
+      background: #181b23;
+      border-bottom-color: #2a2d37;
+    }
+
+    body.dark .props-table td {
+      border-bottom-color: #22252e;
+    }
+
+    body.dark .props-table tr:hover td {
+      background: #181b23;
+    }
+
+    body.dark .prop-type {
+      color: #a5b4fc;
+    }
+
+    body.dark .feature-item {
+      background: #181b23;
+      border-color: #2a2d37;
+    }
+
+    body.dark .version-toggle {
+      background: #181b23;
+      border-color: #2a2d37;
+    }
+
+    body.dark .version-pill {
+      color: #94a3b8;
+    }
+
+    body.dark .version-pill.active {
+      background: var(--primary);
+      color: #0f1117;
+    }
+
+    body.dark .version-pill:hover:not(.active) {
+      color: #e2e8f0;
+    }
+
+    /* ── Dark mode toggle button ──────────────── */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-sm);
+      padding: 5px 8px;
+      cursor: pointer;
+      color: var(--ink-mute);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .15s, color .15s;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--ink-mute);
+      color: var(--ink);
+    }
+
     /* ── Reset ─────────────────────────────────── */
     *,
     *::before,
@@ -102,6 +221,49 @@
       color: var(--on-primary);
       border-radius: var(--r-full);
     }
+
+    /* ── Version toggle ────────────────────────── */
+    .version-toggle {
+      display: flex;
+      gap: 2px;
+      background: var(--canvas-soft);
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-full);
+      padding: 2px;
+    }
+
+    .version-pill {
+      padding: 3px 14px;
+      border-radius: var(--r-full);
+      border: none;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font);
+      cursor: pointer;
+      background: transparent;
+      color: var(--ink-mute);
+      transition: all .15s;
+    }
+
+    .version-pill.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .version-pill:hover:not(.active) {
+      color: var(--ink);
+    }
+
+    [data-v="v1"] { display: none; }
+    [data-v="v2"] { display: block; }
+    body.show-v1 [data-v="v1"] { display: block; }
+    body.show-v1 [data-v="v2"] { display: none; }
+
+    /* Sidebar version scoping */
+    .sidebar[data-v] { display: none; }
+    .sidebar[data-v="v2"] { display: block; }
+    body.show-v1 .sidebar[data-v="v2"] { display: none; }
+    body.show-v1 .sidebar[data-v="v1"] { display: block; }
 
     .topbar-links {
       margin-left: auto;
@@ -1122,22 +1284,75 @@
         </svg> 
         SplitPay SDK
       </a>
-      <span class="version-badge">v1.1.0</span>
+      <div class="version-toggle" id="versionToggle">
+        <button class="version-pill active" data-version="v2">v2</button>
+        <button class="version-pill" data-version="v1">v1</button>
+      </div>
       <nav class="topbar-links">
         <a href="#running-locally">Dev Setup</a>
         <a href="#api-reference">API</a>
-        <a href="https://github.com/reyrinbaf" class="gh-btn" target="_blank" rel="noopener">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg id="sunIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg id="moonIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <a href="https://github.com/reyrinbaf/splitpay" class="gh-btn" target="_blank" rel="noopener">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .269.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
           </svg>
-          GitHub (coming soon)
+          GitHub
         </a>
       </nav>
     </header>
 
     <!-- ── Sidebar ──────────────────────────────── -->
-    <nav class="sidebar" id="sidebar">
+    <!-- ── Sidebar v2 ──────────────────────────── -->
+    <nav class="sidebar" data-v="v2">
+      <div class="nav-group">
+        <span class="nav-group-label">Getting Started</span>
+        <a href="#v2-introduction">Introduction</a>
+        <a href="#v2-installation">Installation</a>
+        <a href="#v2-quick-start">Quick Start</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">SDK Reference</span>
+        <a href="#v2-splitpaytrigger">SplitPayTrigger</a>
+        <a href="#v2-splitpayrecipientpage">SplitPayRecipientPage</a>
+        <a href="#v2-core-functions">Core Functions</a>
+        <a href="#v2-theming">Theming</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">How It Works</span>
+        <a href="#v2-link-format">Link Format</a>
+        <a href="#v2-upi-apps">UPI App Routing</a>
+        <a href="#v2-privacy">Privacy</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Optional</span>
+        <a href="#v2-status-tracking">Status Tracking</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Built by Nikhil Tiwari</span>
+        <a href="https://github.com/reyrinbaf" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/nkhlux/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.twitter.com/reyrinbafs/" target="_blank" rel="noopener">Twitter</a>
+      </div>
+    </nav>
+
+    <!-- ── Sidebar v1 ──────────────────────────── -->
+    <nav class="sidebar" data-v="v1">
       <div class="nav-group">
         <span class="nav-group-label">Getting Started</span>
         <a href="#introduction">Introduction</a>
@@ -1174,6 +1389,361 @@
 
     <!-- ── Content ──────────────────────────────── -->
     <main class="content">
+
+      <!-- ════════════════ V2 CONTENT ════════════════ -->
+      <div data-v="v2">
+
+      <section class="doc-section" id="v2-introduction">
+        <p class="section-eyebrow">SplitPay SDK — v2.0.0</p>
+        <h1>Split payments via UPI. No backend required.</h1>
+        <p class="lead">
+          An open-source SDK that lets your users split a completed payment with friends via UPI.
+          All split data lives in the URL — no server, no database, no API keys.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <div>
+              <strong>Zero backend</strong>
+              <span>Split data is encoded in the URL hash fragment. No server, no Redis, no env vars.</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🔗</span>
+            <div>
+              <strong>One shareable link</strong>
+              <span>Generate a single link. Share it via WhatsApp, Telegram, or any messenger.</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🔒</span>
+            <div>
+              <strong>Private by design</strong>
+              <span>UPI IDs live in the hash fragment — never sent to any server, CDN, or analytics tool.</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">📱</span>
+            <div>
+              <strong>UPI app buttons</strong>
+              <span>Recipients see GPay, PhonePe, and Paytm buttons. One tap to pay.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-installation">
+        <h2>Installation</h2>
+        <div class="terminal">
+          <span class="term-prompt">$ </span><span class="term-cmd">npm install splitpay-sdk</span>
+        </div>
+        <p>Peer dependency: React 16.8+. The <code>core</code> export works without React.</p>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-quick-start">
+        <h2>Quick Start</h2>
+        <p>Two components. That's the full integration.</p>
+
+        <h3>1. Trigger — your checkout page</h3>
+        <div class="code-wrap">
+          <div class="code-label">Your checkout component</div>
+          <pre><code><span class="kw">import</span> { <span class="fn">SplitPayTrigger</span> } <span class="kw">from</span> <span class="st">'splitpay-sdk'</span>
+<span class="kw">import</span> <span class="st">'splitpay-sdk/css'</span>
+
+&lt;<span class="fn">SplitPayTrigger</span>
+  <span class="at">amount</span>={<span class="nm">1497</span>}
+  <span class="at">description</span>=<span class="st">"Swiggy Order #4821"</span>
+  <span class="at">merchantName</span>=<span class="st">"Swiggy"</span>
+  <span class="at">baseUrl</span>=<span class="st">"https://yourapp.com/pay"</span>
+/&gt;</code></pre>
+        </div>
+
+        <h3>2. Recipient page — one route in your app</h3>
+        <div class="code-wrap">
+          <div class="code-label">/pay route</div>
+          <pre><code><span class="kw">import</span> { <span class="fn">SplitPayRecipientPage</span> } <span class="kw">from</span> <span class="st">'splitpay-sdk'</span>
+<span class="kw">import</span> <span class="st">'splitpay-sdk/css'</span>
+
+<span class="cm">// Route: /pay — reads the URL hash automatically</span>
+&lt;<span class="fn">SplitPayRecipientPage</span> /&gt;</code></pre>
+        </div>
+
+        <div class="callout callout-note">
+          <strong>That's it.</strong> No environment variables, no backend deployment, no API keys.
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-splitpaytrigger">
+        <h2>SplitPayTrigger</h2>
+        <p>The main entry point. Renders a "Split this payment" button and a self-contained modal with a 2-step flow: setup (UPI ID + headcount) and share (link + WhatsApp/native share).</p>
+
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="prop-name">amount</span></td>
+                <td><span class="prop-type">number</span></td>
+                <td><span class="badge badge-required">Required</span></td>
+                <td>Total bill amount</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">description</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>Order description shown in the modal and on the recipient page</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">merchantName</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">''</span></td>
+                <td>Your brand name, shown on the recipient page</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">merchantLogo</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>URL to your logo, shown on the recipient page</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">baseUrl</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">origin + '/pay'</span></td>
+                <td>Base URL for the recipient page</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">currency</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">'INR'</span></td>
+                <td>Only INR supported</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">amountUnit</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">'rupees'</span></td>
+                <td><code>'rupees'</code> or <code>'paise'</code></td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">orderId</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>Your order ID, passed through to <code>onSplitCreated</code> callback</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">theme</span></td>
+                <td><span class="prop-type">object</span></td>
+                <td><span class="prop-default">{}</span></td>
+                <td>Colors, fonts, border radius — see <a href="#v2-theming">Theming</a></td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">onSplitCreated</span></td>
+                <td><span class="prop-type">function</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>Called with <code>{ link, orderId, amount, count, recipientAmount }</code></td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">onModalOpen</span></td>
+                <td><span class="prop-type">function</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>Called when modal opens</td>
+              </tr>
+              <tr>
+                <td><span class="prop-name">onModalClose</span></td>
+                <td><span class="prop-type">function</span></td>
+                <td><span class="prop-default">—</span></td>
+                <td>Called when modal closes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-splitpayrecipientpage">
+        <h2>SplitPayRecipientPage</h2>
+        <p>The page recipients land on when they open the payment link. Reads split data from <code>window.location.hash</code>, shows the merchant context, amount breakdown, and per-app UPI pay buttons.</p>
+
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="prop-name">hash</span></td>
+                <td><span class="prop-type">string</span></td>
+                <td><span class="prop-default">window.location.hash</span></td>
+                <td>Override the hash for testing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>This component takes <strong>zero required props</strong> in production. Mount it on a <code>/pay</code> route and it handles everything.</p>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-core-functions">
+        <h2>Core Functions</h2>
+        <p>For custom UIs, server-side link generation, or non-React apps. Zero dependencies.</p>
+        <div class="code-wrap">
+          <div class="code-label">Import from core</div>
+          <pre><code><span class="kw">import</span> { <span class="fn">encodeSplitUrl</span>, <span class="fn">decodeSplitUrl</span>, <span class="fn">splitAmount</span>, <span class="fn">generateUpiLink</span> } <span class="kw">from</span> <span class="st">'splitpay-sdk/core'</span></code></pre>
+        </div>
+
+        <h3>encodeSplitUrl(options)</h3>
+        <p>Generates a payment link with all split data encoded in the hash fragment.</p>
+        <div class="code-wrap">
+          <pre><code><span class="kw">const</span> link = <span class="fn">encodeSplitUrl</span>({
+  <span class="at">baseUrl</span>: <span class="st">'https://yourapp.com/pay'</span>,
+  <span class="at">upiId</span>: <span class="st">'xyz@upi'</span>,
+  <span class="at">amount</span>: <span class="nm">1497</span>,
+  <span class="at">count</span>: <span class="nm">3</span>,
+  <span class="at">description</span>: <span class="st">'Dinner'</span>,
+  <span class="at">initiatorName</span>: <span class="st">'Nikhil'</span>,
+  <span class="at">merchantName</span>: <span class="st">'Swiggy'</span>,       <span class="cm">// optional</span>
+  <span class="at">merchantLogo</span>: <span class="st">'https://...'</span>,   <span class="cm">// optional</span>
+})</code></pre>
+        </div>
+
+        <h3>decodeSplitUrl(urlOrHash)</h3>
+        <p>Decodes a payment link back into a split object.</p>
+        <div class="code-wrap">
+          <pre><code><span class="kw">const</span> data = <span class="fn">decodeSplitUrl</span>(link)
+<span class="cm">// { upiId, perPersonAmount, totalAmount, count, description, initiatorName, merchantName, merchantLogo }</span></code></pre>
+        </div>
+
+        <h3>splitAmount(total, count)</h3>
+        <p>Splits a total among N people. Remainder goes to the initiator.</p>
+        <div class="code-wrap">
+          <pre><code><span class="fn">splitAmount</span>(<span class="nm">1000</span>, <span class="nm">3</span>)
+<span class="cm">// { initiatorAmount: 334, recipientAmount: 333 }</span></code></pre>
+        </div>
+
+        <h3>generateUpiLink(options)</h3>
+        <p>Generates a <code>upi://pay?...</code> deep link string.</p>
+        <div class="code-wrap">
+          <pre><code><span class="fn">generateUpiLink</span>({ <span class="at">upiId</span>: <span class="st">'xyz@upi'</span>, <span class="at">amount</span>: <span class="nm">499</span>, <span class="at">description</span>: <span class="st">'Dinner'</span> })
+<span class="cm">// "upi://pay?pa=xyz%40upi&amp;am=499&amp;tn=SplitPay+Dinner&amp;cu=INR"</span></code></pre>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-theming">
+        <h2>Theming</h2>
+        <p>Pass a <code>theme</code> object to <code>SplitPayTrigger</code>. All values are optional.</p>
+        <div class="code-wrap">
+          <pre><code>&lt;<span class="fn">SplitPayTrigger</span>
+  <span class="at">theme</span>={{
+    <span class="at">primaryColor</span>: <span class="st">'#e53935'</span>,
+    <span class="at">primaryDeep</span>: <span class="st">'#c62828'</span>,
+    <span class="at">onPrimaryColor</span>: <span class="st">'#ffffff'</span>,
+    <span class="at">fontFamily</span>: <span class="st">'Your Font, sans-serif'</span>,
+    <span class="at">borderRadius</span>: <span class="st">'12px'</span>,
+    <span class="at">modalWidth</span>: <span class="st">'520px'</span>,
+    <span class="at">triggerText</span>: <span class="st">'Split the bill'</span>,
+  }}
+  ...
+/&gt;</code></pre>
+        </div>
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead><tr><th>Token</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><span class="prop-name">primaryColor</span></td><td><span class="prop-default">#358858</span></td><td>Buttons, active states</td></tr>
+              <tr><td><span class="prop-name">primaryDeep</span></td><td><span class="prop-default">#2a6e47</span></td><td>Hover state</td></tr>
+              <tr><td><span class="prop-name">onPrimaryColor</span></td><td><span class="prop-default">#ffffff</span></td><td>Text on primary</td></tr>
+              <tr><td><span class="prop-name">fontFamily</span></td><td><span class="prop-default">Inter, sans-serif</span></td><td>All SDK text</td></tr>
+              <tr><td><span class="prop-name">borderRadius</span></td><td><span class="prop-default">6px</span></td><td>Buttons, inputs</td></tr>
+              <tr><td><span class="prop-name">modalWidth</span></td><td><span class="prop-default">480px</span></td><td>Modal max-width</td></tr>
+              <tr><td><span class="prop-name">triggerText</span></td><td><span class="prop-default">Split this payment</span></td><td>Button label</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-link-format">
+        <h2>Link Format</h2>
+        <p>The payment link encodes all split data in the URL hash fragment:</p>
+        <pre><code>https://yourapp.com/pay<span class="gr">#eyJ0IjoieHl6QHVwaSIsImEiOjQ5OSwiZCI6IkRpbm5lciIsImYiOiJOaWtoaWwi...}</span></code></pre>
+        <p>The hash decodes to a compact JSON payload:</p>
+        <div class="code-wrap">
+          <pre><code>{
+  <span class="at">"t"</span>: <span class="st">"xyz@upi"</span>,      <span class="cm">// UPI ID (to)</span>
+  <span class="at">"a"</span>: <span class="nm">499</span>,             <span class="cm">// per-person amount</span>
+  <span class="at">"d"</span>: <span class="st">"Swiggy Order"</span>,  <span class="cm">// description</span>
+  <span class="at">"f"</span>: <span class="st">"Nikhil"</span>,        <span class="cm">// from (initiator name)</span>
+  <span class="at">"T"</span>: <span class="nm">1497</span>,            <span class="cm">// total amount</span>
+  <span class="at">"n"</span>: <span class="nm">3</span>,               <span class="cm">// split count</span>
+  <span class="at">"m"</span>: <span class="st">"Swiggy"</span>,        <span class="cm">// merchant name (optional)</span>
+  <span class="at">"l"</span>: <span class="st">"https://..."</span>    <span class="cm">// merchant logo (optional)</span>
+}</code></pre>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-upi-apps">
+        <h2>UPI App Routing</h2>
+        <p>On mobile, the recipient page shows per-app pay buttons using app-specific deep link schemes:</p>
+        <div class="props-table-wrap">
+          <table class="props-table">
+            <thead><tr><th>App</th><th>Scheme</th></tr></thead>
+            <tbody>
+              <tr><td>Google Pay</td><td><code>tez://upi/pay?...</code></td></tr>
+              <tr><td>PhonePe</td><td><code>phonepe://pay?...</code></td></tr>
+              <tr><td>Paytm</td><td><code>paytmmp://pay?...</code></td></tr>
+              <tr><td>Other</td><td><code>upi://pay?...</code> (generic fallback)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>On desktop, a QR code is shown instead. The <code>qrcode</code> library is lazy-loaded via dynamic import.</p>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-privacy">
+        <h2>Privacy</h2>
+        <p>Everything after <code>#</code> in a URL is <strong>never sent over HTTP</strong>. This means:</p>
+        <ul class="doc-list">
+          <li>Your server never sees the UPI ID (even if you host the recipient page)</li>
+          <li>CDN and proxy access logs don't contain it</li>
+          <li>Analytics tools (Google Analytics, Mixpanel) don't capture it by default</li>
+          <li>URL shorteners preserve hash fragments but don't log them server-side</li>
+        </ul>
+        <p>The UPI ID only exists in two browsers: the initiator's (which generated the link) and the recipient's (which decoded it).</p>
+      </section>
+
+      <hr class="divider">
+
+      <section class="doc-section" id="v2-status-tracking">
+        <h2>Status Tracking (Optional)</h2>
+        <p>The default SDK is fully stateless — there's no server to tell you who paid. The initiator gets a UPI push notification when money arrives.</p>
+        <p>If you want an in-app "who paid?" panel, deploy the server template from <code>server/</code> to your own Vercel + Upstash Redis:</p>
+        <div class="terminal">
+          <span class="term-prompt">$ </span><span class="term-cmd">cd server && npx vercel</span>
+        </div>
+        <p>This gives you <code>SplitStatusPanel</code>, <code>useSplit</code>, and <code>useSplitStatus</code> — the same components from v1, running on <strong>your own infrastructure</strong>.</p>
+        <div class="callout callout-warn">
+          <strong>Your data, your responsibility.</strong> The server stores UPI IDs and payment confirmations. The core SDK intentionally avoids storing any user data.
+        </div>
+      </section>
+
+      </div>
+      <!-- ════════════════ END V2 CONTENT ════════════════ -->
+
+      <!-- ════════════════ V1 CONTENT ════════════════ -->
+      <div data-v="v1">
 
       <!-- Introduction -->
       <section class="doc-section" id="introduction">
@@ -1892,25 +2462,88 @@
           library is never sent to mobile clients.</p>
       </section>
 
+      </div>
+      <!-- ════════════════ END V1 CONTENT ════════════════ -->
+
     </main>
   </div>
 
   <script>
-    // Active nav link tracking
-    const sections = document.querySelectorAll('[id]')
-    const links = document.querySelectorAll('.sidebar a')
+    // Version toggle
+    const toggle = document.getElementById('versionToggle')
+    const pills = toggle.querySelectorAll('.version-pill')
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          links.forEach(l => l.classList.remove('active'))
-          const active = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`)
-          if (active) active.classList.add('active')
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const version = pill.dataset.version
+        pills.forEach(p => p.classList.remove('active'))
+        pill.classList.add('active')
+
+        if (version === 'v1') {
+          document.body.classList.add('show-v1')
+        } else {
+          document.body.classList.remove('show-v1')
         }
-      })
-    }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 })
 
-    sections.forEach(s => observer.observe(s))
+        // Scroll to top on version switch
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+
+        // Re-initialize observer for the active version
+        setupObserver()
+      })
+    })
+
+    // Active nav link tracking
+    function setupObserver() {
+      const activeVersion = document.body.classList.contains('show-v1') ? 'v1' : 'v2'
+      const activeSidebar = document.querySelector(`.sidebar[data-v="${activeVersion}"]`)
+      if (!activeSidebar) return
+
+      const links = activeSidebar.querySelectorAll('a[href^="#"]')
+      const sectionIds = Array.from(links).map(l => l.getAttribute('href').slice(1))
+      const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean)
+
+      // Clear previous active states
+      document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'))
+
+      if (window._splitpayObserver) window._splitpayObserver.disconnect()
+
+      window._splitpayObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            links.forEach(l => l.classList.remove('active'))
+            const active = activeSidebar.querySelector(`a[href="#${entry.target.id}"]`)
+            if (active) active.classList.add('active')
+          }
+        })
+      }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 })
+
+      sections.forEach(s => window._splitpayObserver.observe(s))
+    }
+
+    setupObserver()
+
+    // Dark mode toggle
+    const themeBtn = document.getElementById('themeToggle')
+    const sunIcon = document.getElementById('sunIcon')
+    const moonIcon = document.getElementById('moonIcon')
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark)
+      sunIcon.style.display = dark ? 'none' : 'block'
+      moonIcon.style.display = dark ? 'block' : 'none'
+      localStorage.setItem('splitpay-theme', dark ? 'dark' : 'light')
+    }
+
+    // Init from localStorage or system preference
+    const stored = localStorage.getItem('splitpay-theme')
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      applyTheme(true)
+    }
+
+    themeBtn.addEventListener('click', () => {
+      applyTheme(!document.body.classList.contains('dark'))
+    })
   </script>
 </body>
 
